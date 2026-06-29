@@ -21,10 +21,15 @@ class MasterItemsController extends Controller
 
         $data_search = MasterItem::query();
 
-        if (!empty($kode)) $data_search = $data_search->where('kode', $kode);
-        if (!empty($nama)) $data_search = $data_search->where('nama', 'LIKE', '%' . $nama . '%');
-        if (!empty($hargamin)) $data_search = $data_search->where('harga_beli', '>=', $hargamin)->where('harga_beli', '<=', $hargamax);
-
+        if (!empty($nama)) {
+            $data_search = $data_search->where('nama', 'LIKE', '%' . $nama . '%');
+        }
+        if (!empty($hargamin)) {
+            $data_search = $data_search->where('harga_beli', '>=', $hargamin);
+        }
+        if (!empty($hargamax)) {
+            $data_search = $data_search->where('harga_beli', '<=', $hargamax);
+        }
         $data_search = $data_search->select('kode', 'nama', 'jenis', 'harga_beli', 'laba', 'supplier')->orderBy('id')->get();
 
 
@@ -43,6 +48,7 @@ class MasterItemsController extends Controller
         }
         $data['item'] = $item;
         $data['method'] = $method;
+        $data['kategori_all'] = \App\Models\KategoriItem::all();
         return view('master_items.form.index', $data);
     }
 
@@ -59,7 +65,6 @@ class MasterItemsController extends Controller
             $kode = MasterItem::count('id');
             $kode = $kode + 1;
             $kode = str_pad($kode, 5, '0', STR_PAD_LEFT);
-            sleep(3);
         } else {
             $data_item = MasterItem::find($id);
             $kode = $data_item->kode;
@@ -72,6 +77,12 @@ class MasterItemsController extends Controller
         $data_item->supplier = $request->supplier;
         $data_item->jenis = $request->jenis;
         $data_item->save();
+        
+        if ($request->has('kategori')) {
+            $data_item->kategoris()->sync($request->kategori);
+        } else {
+            $data_item->kategoris()->detach(); // Kosongkan jika tidak ada yang dipilih
+        }
 
         return redirect('master-items');
     }

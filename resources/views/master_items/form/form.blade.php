@@ -48,6 +48,21 @@
         </select>
     </div>
 
+    <div class="form-group mt-3">
+        <label>Kategori</label>
+        <select class="form-control" name="kategori[]" multiple>
+            @if(isset($kategori_all))
+                @foreach($kategori_all as $kat)
+                    <option value="{{ $kat->id }}" 
+                        @if(isset($item) && $item->kategoris->contains($kat->id)) selected @endif>
+                        {{ $kat->nama }}
+                    </option>
+                @endforeach
+            @endif
+        </select>
+        <small class="text-muted">Tahan tombol CTRL / CMD untuk memilih lebih dari satu kategori.</small>
+    </div>
+
     <button class="btn btn-primary mt-3">Submit</button>
 
 </form>

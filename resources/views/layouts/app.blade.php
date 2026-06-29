@@ -16,6 +16,7 @@
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
@@ -32,7 +33,12 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
-
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('/master-items') }}">Master Items</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('/kategori-items') }}">Kategori Items</a>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
